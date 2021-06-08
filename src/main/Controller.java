@@ -2,6 +2,7 @@ package main;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import main.model.Database;
 
 public class Controller {
 
@@ -13,9 +14,5 @@ public class Controller {
     private Button CButton;
     @FXML
     private Button DButton;
-
-    public void setQuestion() {
-
-    }
 
 }
