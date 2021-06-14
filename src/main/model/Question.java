@@ -3,10 +3,10 @@ package main.model;
 public class Question {
 
     private String question;
-    private String correctAnswer;
-    private String falseAnswer1;
-    private String falseAnswer2;
-    private String falseAnswer3;
+    private Answer correctAnswer;
+    private Answer falseAnswer1;
+    private Answer falseAnswer2;
+    private Answer falseAnswer3;
     private int difficulty;
 
     public String getQuestion() {
@@ -17,35 +17,35 @@ public class Question {
         this.question = question;
     }
 
-    public String getCorrectAnswer() {
+    public Answer getCorrectAnswer() {
         return correctAnswer;
     }
 
-    public void setCorrectAnswer(String correctAnswer) {
+    public void setCorrectAnswer(Answer correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 
-    public String getFalseAnswer1() {
+    public Answer getFalseAnswer1() {
         return falseAnswer1;
     }
 
-    public void setFalseAnswer1(String falseAnswer1) {
+    public void setFalseAnswer1(Answer falseAnswer1) {
         this.falseAnswer1 = falseAnswer1;
     }
 
-    public String getFalseAnswer2() {
+    public Answer getFalseAnswer2() {
         return falseAnswer2;
     }
 
-    public void setFalseAnswer2(String falseAnswer2) {
+    public void setFalseAnswer2(Answer falseAnswer2) {
         this.falseAnswer2 = falseAnswer2;
     }
 
-    public String getFalseAnswer3() {
+    public Answer getFalseAnswer3() {
         return falseAnswer3;
     }
 
-    public void setFalseAnswer3(String falseAnswer3) {
+    public void setFalseAnswer3(Answer falseAnswer3) {
         this.falseAnswer3 = falseAnswer3;
     }
 
@@ -58,6 +58,6 @@ public class Question {
     }
 
     public String toString() {
-        return this.question + ": A: " + this.correctAnswer + " B: " + this.falseAnswer1 + " C: " + this.falseAnswer2 + " D: " + this.falseAnswer3;
+        return this.question + "\nA: " + this.correctAnswer + "\nB: " + this.falseAnswer1 + "\nC: " + this.falseAnswer2 + "\nD: " + this.falseAnswer3;
     }
 }

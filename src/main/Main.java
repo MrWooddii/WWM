@@ -12,10 +12,31 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        primaryStage.setTitle("Hello World");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+
+        Parent root = loader.load();
+        Controller controller = loader.getController();
+        controller.setQuizQuestion();
+
+        primaryStage.setTitle("Wer wird Millionär?");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+
+        /*
+        while(game) {
+            Parent root = loader.load();
+            Controller controller = loader.getController();
+            controller.setQuizQuestion();
+
+            primaryStage.setTitle("Wer wird Millionär?");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+            game = false;
+
+        }*/
+
+
     }
 
     @Override
@@ -27,7 +48,7 @@ public class Main extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        Database.getInstance().open();
+        Database.getInstance().close();
     }
 
     public static void main(String[] args) {

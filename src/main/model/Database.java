@@ -1,5 +1,7 @@
 package main.model;
 
+import main.Controller;
+
 import java.sql.*;
 
 public class Database {
@@ -48,9 +50,7 @@ public class Database {
         return instance;
     }
 
-
-
-    public void getRandomQuestion(int difficulty) {
+    public Question getRandomQuestion(int difficulty) {
 
         try (Statement statement = conn.createStatement();
              PreparedStatement ps = conn.prepareStatement("SELECT * FROM questions WHERE " + COLUMN_DIFFICULTY + "=? ORDER BY random() LIMIT 1")) {
@@ -63,17 +63,30 @@ public class Database {
             Question question = new Question();
 
             question.setQuestion(result.getString(INDEX_QUESTIONTEXT));
+
+            question.setCorrectAnswer(new Answer(result.getString(INDEX_CORRECT_ANSWER), true));
+            question.setFalseAnswer1(new Answer(result.getString(INDEX_FALSE_ANSWER1), false));
+            question.setFalseAnswer2(new Answer(result.getString(INDEX_FALSE_ANSWER2), false));
+            question.setFalseAnswer3(new Answer(result.getString(INDEX_FALSE_ANSWER3), false));
+
+
+            /*
+            Set answers mit String (alt)
             question.setCorrectAnswer(result.getString(INDEX_CORRECT_ANSWER));
             question.setFalseAnswer1(result.getString(INDEX_FALSE_ANSWER1));
             question.setFalseAnswer2(result.getString(INDEX_FALSE_ANSWER2));
             question.setFalseAnswer3(result.getString(INDEX_FALSE_ANSWER3));
+             */
 
             System.out.println(question);
 
             result.close();
 
+            return question;
+
         } catch (SQLException e) {
             System.out.println("Could not connect to database ps: " + e.getMessage());
+            return null;
         }
     }
 
