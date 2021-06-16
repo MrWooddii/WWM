@@ -4,4 +4,5 @@ module WWM {
     requires java.sql;
 
     opens main;
+    opens main.controllers;
 }

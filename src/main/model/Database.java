@@ -1,7 +1,5 @@
 package main.model;
 
-import main.Controller;
-
 import java.sql.*;
 
 public class Database {
@@ -54,8 +52,7 @@ public class Database {
 
     public Question getRandomQuestion(int difficulty) {
 
-        try (Statement statement = conn.createStatement();
-             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + TABLE_QUESTIONS + " WHERE " + COLUMN_DIFFICULTY + "=? AND used = 0 ORDER BY random() LIMIT 1")) {
+        try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + TABLE_QUESTIONS + " WHERE " + COLUMN_DIFFICULTY + "=? AND used = 0 ORDER BY random() LIMIT 1")) {
 
             //set difficulty
             ps.setInt(1, difficulty);
@@ -64,7 +61,7 @@ public class Database {
 
             //TODO: get Rowid
 
-            RowId rowid = result.getRowId("");
+            //RowId rowid = result.getRowId("");
 
             //int id = Integer.parseInt(String.valueOf(rowid));
             //System.out.println("Id: " + id);
@@ -80,7 +77,7 @@ public class Database {
 
             result.close();
             ps.close();
-            statement.close();
+            //statement.close();
 
             //setQuestionUsed(id, 1);
 
@@ -96,8 +93,7 @@ public class Database {
     //used kann 0 oder 1 sein
 
     private void setQuestionUsed(int id, int used) {
-        try (Statement statement = conn.createStatement();
-            PreparedStatement ps = conn.prepareStatement("UPDATE " + TABLE_QUESTIONS + " SET " + COLUMN_USED + "= 1 WHERE ROWID =?")) {
+        try (PreparedStatement ps = conn.prepareStatement("UPDATE " + TABLE_QUESTIONS + " SET " + COLUMN_USED + "= 1 WHERE ROWID =?")) {
 
             if(used < 0 || used > 1) {
                 used = 1;
