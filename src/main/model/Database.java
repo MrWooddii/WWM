@@ -21,6 +21,7 @@ public class Database {
     public static final String COLUMN_FALSE_ANSWER2 = "falseAnswer2";
     public static final String COLUMN_FALSE_ANSWER3 = "falseAnswer3";
     public static final String COLUMN_DIFFICULTY = "difficulty";
+    public static final String COLUMN_USED = "used";
 
     public static final int INDEX_QUESTIONTEXT = 1;
     public static final int INDEX_CORRECT_ANSWER = 2;
@@ -30,11 +31,12 @@ public class Database {
 
     //Schwierigkeit ist abhängig von der Nummer der Frage.
     //1 - 5 = 1
-    //6 - 9 = 2
-    //10 - 13 = 3
+    //6 - 10 = 2
+    //11 - 13 = 3
     //14 - 15 = 4
 
     public static final int INDEX_DIFFICULTY = 6;
+    public static final int INDEX_USED = 7;
 
     private Connection conn;
 
@@ -53,34 +55,34 @@ public class Database {
     public Question getRandomQuestion(int difficulty) {
 
         try (Statement statement = conn.createStatement();
-             PreparedStatement ps = conn.prepareStatement("SELECT * FROM questions WHERE " + COLUMN_DIFFICULTY + "=? ORDER BY random() LIMIT 1")) {
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + TABLE_QUESTIONS + " WHERE " + COLUMN_DIFFICULTY + "=? AND used = 0 ORDER BY random() LIMIT 1")) {
 
             //set difficulty
-            ps.setString(1, String.valueOf(difficulty));
+            ps.setInt(1, difficulty);
 
             ResultSet result = ps.executeQuery();
 
+            //TODO: get Rowid
+
+            RowId rowid = result.getRowId("");
+
+            //int id = Integer.parseInt(String.valueOf(rowid));
+            //System.out.println("Id: " + id);
+
             Question question = new Question();
 
-            question.setQuestion(result.getString(INDEX_QUESTIONTEXT));
+            question.setQuestion(result.getString(COLUMN_QUESTIONTEXT));
 
-            question.setCorrectAnswer(new Answer(result.getString(INDEX_CORRECT_ANSWER), true));
-            question.setFalseAnswer1(new Answer(result.getString(INDEX_FALSE_ANSWER1), false));
-            question.setFalseAnswer2(new Answer(result.getString(INDEX_FALSE_ANSWER2), false));
-            question.setFalseAnswer3(new Answer(result.getString(INDEX_FALSE_ANSWER3), false));
-
-
-            /*
-            Set answers mit String (alt)
-            question.setCorrectAnswer(result.getString(INDEX_CORRECT_ANSWER));
-            question.setFalseAnswer1(result.getString(INDEX_FALSE_ANSWER1));
-            question.setFalseAnswer2(result.getString(INDEX_FALSE_ANSWER2));
-            question.setFalseAnswer3(result.getString(INDEX_FALSE_ANSWER3));
-             */
-
-            System.out.println(question);
+            question.setCorrectAnswer(new Answer(result.getString(COLUMN_CORRECT_ANSWER), true));
+            question.setFalseAnswer1(new Answer(result.getString(COLUMN_FALSE_ANSWER1), false));
+            question.setFalseAnswer2(new Answer(result.getString(COLUMN_FALSE_ANSWER2), false));
+            question.setFalseAnswer3(new Answer(result.getString(COLUMN_FALSE_ANSWER3), false));
 
             result.close();
+            ps.close();
+            statement.close();
+
+            //setQuestionUsed(id, 1);
 
             return question;
 
@@ -90,12 +92,33 @@ public class Database {
         }
     }
 
+    //Die Frage wird als benutzt markiert
+    //used kann 0 oder 1 sein
+
+    private void setQuestionUsed(int id, int used) {
+        try (Statement statement = conn.createStatement();
+            PreparedStatement ps = conn.prepareStatement("UPDATE " + TABLE_QUESTIONS + " SET " + COLUMN_USED + "= 1 WHERE ROWID =?")) {
+
+            if(used < 0 || used > 1) {
+                used = 1;
+            }
+
+            ps.setInt(1, id);
+            System.out.println("successfully updated used");
+
+            ps.close();
+
+        } catch (SQLException e) {
+            System.out.println("Could not connect to database setQuestion: " + e.getMessage());
+        }
+    }
+
     public boolean open() {
         try {
             conn = DriverManager.getConnection(CONNECTION_STRING);
             return true;
         } catch (SQLException e) {
-            System.out.println("Could not connect to database: " + e.getMessage());
+            System.out.println("Could not connect to database (Driver Manager): " + e.getMessage());
             return false;
         }
     }

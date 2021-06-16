@@ -9,12 +9,14 @@ import main.model.Answer;
 import main.model.Database;
 import main.model.Question;
 
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Controller {
 
-    private int anzahl = 1;
+    private int fragenAnzahl = 1;
     private Question question;
+
     @FXML
     private Label questionLabel;
     @FXML
@@ -28,12 +30,31 @@ public class Controller {
 
     public void setQuizQuestion() {
         //TODO: Schwierigkeit setzen
-        question = Database.getInstance().getRandomQuestion(1);
+
+        int difficulty = 1;
+
+        if(fragenAnzahl > 6 && fragenAnzahl <= 10) difficulty = 2;
+        if(fragenAnzahl > 10 && fragenAnzahl <= 13) difficulty = 3;
+        if(fragenAnzahl > 13) difficulty = 4;
+
+        System.out.println("Fragenanzahl: " + fragenAnzahl);
+        System.out.println("Schwierigkeit: " + difficulty);
+
+        question = Database.getInstance().getRandomQuestion(difficulty);
         questionLabel.setText(question.getQuestion());
-        AButton.setText(question.getCorrectAnswer().getAnswer());
-        BButton.setText(question.getFalseAnswer1().getAnswer());
-        CButton.setText(question.getFalseAnswer2().getAnswer());
-        DButton.setText(question.getFalseAnswer3().getAnswer());
+
+        Answer[] answers = new Answer[4];
+        answers[0] = question.getCorrectAnswer();
+        answers[1] = question.getFalseAnswer1();
+        answers[2] = question.getFalseAnswer2();
+        answers[3] = question.getFalseAnswer3();
+
+        Collections.shuffle(Arrays.asList(answers));
+
+        AButton.setText(answers[0].getAnswer());
+        BButton.setText(answers[1].getAnswer());
+        CButton.setText(answers[2].getAnswer());
+        DButton.setText(answers[3].getAnswer());
         System.out.println("ich mache was");
     }
 
@@ -48,9 +69,8 @@ public class Controller {
         else if(checkAnswer(e, DButton)) correctAnswer = true;
 
         if(correctAnswer) {
+            fragenAnzahl++;
             setQuizQuestion();
-            anzahl++;
-            System.out.println(anzahl);
         } else {
             //TODO: Game over Screen
             System.out.println("Game over");

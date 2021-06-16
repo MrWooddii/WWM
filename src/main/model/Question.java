@@ -8,6 +8,7 @@ public class Question {
     private Answer falseAnswer2;
     private Answer falseAnswer3;
     private int difficulty;
+    private boolean used;
 
     public String getQuestion() {
         return question;
@@ -55,6 +56,14 @@ public class Question {
 
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
     public String toString() {
