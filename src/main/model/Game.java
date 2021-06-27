@@ -5,8 +5,9 @@ import javafx.scene.control.Button;
 
 public class Game {
 
-    private static int fragenAnzahl = 1;
+    private static int questionNum = 1;
     private static Question question;
+    private static boolean game = true;
 
     private static Game instance = new Game();
 
@@ -23,17 +24,19 @@ public class Game {
             System.out.println("correct");
             return true;
         }
+
+        game = false;
         return false;
     }
 
     public Question sendQuestion() {
         int difficulty = 1;
 
-        if(fragenAnzahl > 6 && fragenAnzahl <= 10) difficulty = 2;
-        if(fragenAnzahl > 10 && fragenAnzahl <= 13) difficulty = 3;
-        if(fragenAnzahl > 13) difficulty = 4;
+        if(questionNum > 6 && questionNum <= 10) difficulty = 2;
+        if(questionNum > 10 && questionNum <= 13) difficulty = 3;
+        if(questionNum > 13) difficulty = 4;
 
-        System.out.println("Fragenanzahl: " + fragenAnzahl);
+        System.out.println("Fragenanzahl: " + questionNum);
         System.out.println("Schwierigkeit: " + difficulty);
 
         question = Database.getInstance().getRandomQuestion(difficulty);
@@ -49,15 +52,23 @@ public class Game {
         Game.question = question;
     }
 
-    public static int getFragenAnzahl() {
-        return fragenAnzahl;
+    public static int getQuestionNum() {
+        return questionNum;
     }
 
     public static void increaseFragenAnzahl() {
-        fragenAnzahl++;
+        questionNum++;
     }
 
-    public static void setFragenAnzahl(int fragenAnzahl) {
-        fragenAnzahl = fragenAnzahl;
+    public static void setQuestionNum(int questionNum) {
+        questionNum = questionNum;
+    }
+
+    public static boolean isGame() {
+        return game;
+    }
+
+    public static void setGame(boolean game) {
+        Game.game = game;
     }
 }

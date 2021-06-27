@@ -2,12 +2,17 @@ package main.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import main.model.Answer;
 import main.model.Game;
 import main.model.Question;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -30,7 +35,7 @@ public class Controller {
 
     //Klick auf den continueButton setzt eine neue Frage
     @FXML
-    public void setQuizQuestion() {
+    public void setQuizQuestion() throws IOException {
 
         Button[] buttons = {AButton, BButton, CButton, DButton};
 
